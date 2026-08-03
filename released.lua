@@ -1,5 +1,4 @@
 local UILibrary = {}
---// Modules
 
 local function getObjGen()
     local objGen = {}
@@ -286,7 +285,6 @@ local function getObjGen()
                 UIAspectRatioConstraint_17 = Instance.new("UIAspectRatioConstraint")
             }
 
-            --Properties:
 
             Gui.UIObjects.Name = "UIObjects"
 
@@ -1227,7 +1225,6 @@ local function getObjGen()
             Gui.MainUI.AnchorPoint = Vector2.new(0.5, 0.5)
             Gui.MainUI.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
             Gui.MainUI.Position = UDim2.new(0.5, 0, 0.5, 0)
-            --Gui.MainUI.Size = UDim2.new(0.47, 0, 0.75, 0)
             Gui.MainUI.Size = UDim2.new(0, 851, 0, 488)
             Gui.MainUI.ZIndex = 100
 
@@ -2079,7 +2076,6 @@ local function getObjGen()
             Gui.Section.BackgroundTransparency = 1.000
             Gui.Section.Size = UDim2.new(1, 0, 0, 0)
             Gui.Section.ZIndex = 101
-            --Gui.Section.AutomaticSize = Enum.AutomaticSize.Y
 
             Gui.Border.Name = "Border"
             Gui.Border.Parent = Gui.Section
@@ -2116,7 +2112,6 @@ local function getObjGen()
             Gui.Content_8.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
             Gui.Content_8.BackgroundTransparency = 1.000
             Gui.Content_8.Size = UDim2.new(1, 0, 1, 0)
-            --Gui.Content_8.AutomaticSize = Enum.AutomaticSize.Y
 
             Gui.UIPadding_12.Parent = Gui.Content_8
             Gui.UIPadding_12.PaddingBottom = UDim.new(0, 8)
@@ -2681,8 +2676,8 @@ local function getDragIt()
         local Settings = {
             HoverIcon = nil,
             DraggingIcon = nil,
-            PriorityIcon = nil, -- This Defines the Icon to which more priority should be given , "Hover" for HoverIcon "Dragging" for DraggingIcon
-            Priority = "Snapping" -- This Defines whether "Clipping" or "Snapping" should be more prioritized.
+            PriorityIcon = nil, 
+            Priority = "Snapping"
         }
 
         function GuiObject:SetData(Data)
@@ -2733,7 +2728,7 @@ local function getDragIt()
         coroutine.wrap(
             function()
                 while Settings.HoverIcon do
-                    RS.RenderStepped:Wait()
+                    RS.RenderStepped:task.wait()
                     if Settings.PriorityIcon == "Hover" or not Holding then
                         local CanSet = true
                         for _, v in ipairs(Objects) do
@@ -2923,7 +2918,7 @@ local function getDragIt()
                                             if
                                                 (Closest * 0.0264583333) <= 3.5 or Top <= 2.5 or Right <= 2.5 or
                                                     Left <= 2.5 and Bottom <= 2.5
-                                                then -- Converting the Pixels to CM for easy comparing
+                                                then
                                                 v.Snap = ChosenSnap
                                             else
                                                 v.Snap = nil
@@ -2959,7 +2954,7 @@ local function getDragIt()
                                         if v.ResponseTime then
                                             if v.ResponseTime > 0 then
                                                 for i = 1, 10 do
-                                                    RS.RenderStepped:Wait()
+                                                    RS.RenderStepped:task.wait()
                                                     v.Object.Position =
                                                         v.Object.Position:Lerp(v.Clipped.Position, i / 10)
                                                 end
@@ -2973,7 +2968,7 @@ local function getDragIt()
                                         local Target = Utils.Snap(v.Snap, v.Object, v._Target)
                                         if v.ResponseTime then
                                             for i = 1, 10 do
-                                                RS.RenderStepped:Wait()
+                                                RS.RenderStepped:task.wait()
 
                                                 v.Object.Position = v.Object.Position:Lerp(Target, i / 10)
                                             end
@@ -3010,7 +3005,6 @@ local function getEffect()
         local HoverEvent = Instance.new("BindableEvent")
         local conns = {}
 
-        --// effect here
         local function Start()
             TweenService:Create(
                 ui.HoverFrame,
@@ -3078,11 +3072,11 @@ local function getEffect()
 
         return {
             Event = HoverEvent.Event,
-            Disconnect = function()
+Disconnect = function()
                 for i, v in pairs(conns) do
-                    conns:Disconnect()
+                    v:Disconnect()
                 end
-
+                table.clear(conns)
                 End()
             end
         }
@@ -3092,7 +3086,6 @@ local function getEffect()
         local ClickEvent = Instance.new("BindableEvent")
         local conns = {}
 
-        --// effect here
         local function Start()
             TweenService:Create(
                 ui,
@@ -3155,11 +3148,11 @@ local function getEffect()
 
         return {
             Event = ClickEvent.Event,
-            Disconnect = function()
+           Disconnect = function()
                 for i, v in pairs(conns) do
-                    conns:Disconnect()
+                    v:Disconnect()
                 end
-
+                table.clear(conns)
                 End()
             end
         }
@@ -3170,13 +3163,17 @@ end
 
 local EffectLib = getEffect()
 local CircleClick = function(Button)
+    local UIS = game:GetService("UserInputService")
     local circle = Instance.new("Frame");
     Instance.new("UICorner", circle);
     
     circle.UICorner.CornerRadius = UDim.new(1, 0);
     circle.AnchorPoint = Vector2.new(0.5, 0.5);
     circle.BackgroundColor3 = Color3.fromRGB(0,0,0);
-    circle.Position = UDim2.new(0, game.Players.LocalPlayer:GetMouse().X - Button.AbsolutePosition.X, 0, game.Players.LocalPlayer:GetMouse().Y - Button.AbsolutePosition.Y);
+
+    local mouseLoc = UIS:GetMouseLocation() - game:GetService("GuiService"):GetGuiInset()
+    circle.Position = UDim2.new(0, mouseLoc.X - Button.AbsolutePosition.X, 0, mouseLoc.Y - Button.AbsolutePosition.Y);
+    
     circle.Size = UDim2.new(0, 1, 0, 1);
     circle.Transparency = .8;
     circle.ZIndex = 999
@@ -3193,7 +3190,6 @@ local CircleClick = function(Button)
     tween:Play();
 end
 
---// Util
 local function getLayoutOrder(UI)
     local layoutTable = {0}
 
@@ -3206,7 +3202,6 @@ local function getLayoutOrder(UI)
     return math.max(unpack(layoutTable)) + 1
 end
 
---// Services
 local RunService = game:GetService("RunService")
 local HttpService = game:GetService("HttpService")
 local Players = game:GetService("Players")
@@ -3215,7 +3210,6 @@ local LocalPlayer = Players.LocalPlayer
 local TweenService = game:GetService("TweenService")
 local TI = TweenInfo.new(.4, Enum.EasingStyle.Exponential, Enum.EasingDirection.Out)
 
--->> setup UILib table
 local UILibNames = {
     "Window",
     "Category",
@@ -3239,23 +3233,15 @@ function UILibrary.new(gameName, userId, rank)
     local window = objectGenerator.new("Window")
     window.Parent = GUI
 
-    --// make UI draggable
-    -->> LogoHitbox
+    local DragHitbox = Instance.new("Frame")
+    DragHitbox.Name = "DragHitbox"
+    DragHitbox.BackgroundTransparency = 1
+    DragHitbox.Size = UDim2.new(1, 0, 0, 45) 
+    DragHitbox.Position = UDim2.new(0, 0, 0, 0)
+    DragHitbox.ZIndex = 300
+    DragHitbox.Parent = window.MainUI
 
-    local Frame = Instance.new("Frame")
-    Frame.BackgroundTransparency = 1
-    Frame.Size = UDim2.fromScale(2, 2)
-
-    Frame.AnchorPoint = Vector2.new(0.5, 0.5)
-    Frame.Position = UDim2.fromScale(.5, .5)
-
-    local AspectRatio = Instance.new("UIAspectRatioConstraint", Frame)
-    AspectRatio.AspectRatio = 1.2
-
-    Frame.Parent = window.MainUI.Sidebar.ContentHolder.Cheats.Logo
-    Frame.ZIndex = 300
-
-    local Drag = Draggable.Drag(window.MainUI, Frame)
+    local Drag = Draggable.Drag(window.MainUI, DragHitbox)
 
     --// Customize the GUI
     window.Watermark.Text = ("hydrahub v2 | %s | %s"):format(userId, gameName)
@@ -3327,12 +3313,13 @@ function UILibrary.Window:Notification(sett)
     local connections = {}
     local isOpen = true
 
-    local function expire()
+local function expire()
         isOpen = false
 
         for i, v in pairs(connections) do
             v:Disconnect()
         end
+        table.clear(connections)
 
         TweenService:Create(
             Notif.Notification,
@@ -3347,7 +3334,6 @@ function UILibrary.Window:Notification(sett)
             TweenInfo.new(.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
             {
                 Position = UDim2.fromScale(2, 0)
-                --Size = UDim2.fromScale(0,1)
             }
         ):Play()
 
@@ -3366,33 +3352,22 @@ function UILibrary.Window:Notification(sett)
 
                 Notif.Parent:ClearAllChildren()
 
-                wait(.3)
-                parent:Destroy()
+                task.wait(.3) 
+                
+                if parent then
+                    parent:Destroy()
+                end
             end
         )
 
         for i, v in pairs(Notif:GetDescendants()) do
-            if v:IsA("ImageLabel") or v:IsA("ImageButton") then
-                TweenService:Create(
-                    v,
-                    TI,
-                    {
-                        ImageTransparency = 1
-                    }
-                ):Play()
-            elseif v:IsA("TextLabel") then
-                TweenService:Create(
-                    v,
-                    TI,
-                    {
-                        TextTransparency = 1
-                    }
-                ):Play()
+            if (v:IsA("ImageLabel") or v:IsA("ImageButton")) and v.ImageTransparency < 1 then
+                TweenService:Create(v, TI, {ImageTransparency = 1}):Play()
+            elseif v:IsA("TextLabel") and v.TextTransparency < 1 then
+                TweenService:Create(v, TI, {TextTransparency = 1}):Play()
             end
         end
     end
-
-    --// too fucking lazy to re-encode all instances
 
     if sett.expire then
         task.delay(
@@ -3496,14 +3471,13 @@ function UILibrary.Window:Prompt(sett)
     local selection = nil
     local bindable = Instance.new("BindableEvent")
 
-    local function expire()
+local function expire()
         isOpen = false
-
-        bindable:Fire()
 
         for i, v in pairs(connections) do
             v:Disconnect()
         end
+        table.clear(connections)
 
         TweenService:Create(
             Notif.Notification,
@@ -3518,7 +3492,6 @@ function UILibrary.Window:Prompt(sett)
             TweenInfo.new(.3, Enum.EasingStyle.Sine, Enum.EasingDirection.InOut),
             {
                 Position = UDim2.fromScale(2, 0)
-                --Size = UDim2.fromScale(0,1)
             }
         ):Play()
 
@@ -3537,28 +3510,19 @@ function UILibrary.Window:Prompt(sett)
 
                 Notif.Parent:ClearAllChildren()
 
-                wait(.3)
-                parent:Destroy()
+                task.wait(.3) 
+                
+                if parent then
+                    parent:Destroy()
+                end
             end
         )
 
         for i, v in pairs(Notif:GetDescendants()) do
-            if v:IsA("ImageLabel") or v:IsA("ImageButton") then
-                TweenService:Create(
-                    v,
-                    TI,
-                    {
-                        ImageTransparency = 1
-                    }
-                ):Play()
-            elseif v:IsA("TextLabel") then
-                TweenService:Create(
-                    v,
-                    TI,
-                    {
-                        TextTransparency = 1
-                    }
-                ):Play()
+            if (v:IsA("ImageLabel") or v:IsA("ImageButton")) and v.ImageTransparency < 1 then
+                TweenService:Create(v, TI, {ImageTransparency = 1}):Play()
+            elseif v:IsA("TextLabel") and v.TextTransparency < 1 then
+                TweenService:Create(v, TI, {TextTransparency = 1}):Play()
             end
         end
     end
@@ -3676,7 +3640,7 @@ function UILibrary.Window:Prompt(sett)
         )
     )
 
-    bindable.Event:Wait()
+    bindable.Event:task.wait()
     return selection
 end
 
@@ -4034,10 +3998,6 @@ function UILibrary.Button:Section(name, side)
         UILibrary.Section
     )
 end
-
---// now it gets fun!!!
---// im jk this is where the pain begins
-
 local cheatInfo = {
     ["Button"] = {
         FullSize = true
@@ -4103,7 +4063,7 @@ local function generateCheatBase(Cheat, sett)
     return cheatBase
 end
 
---// some effects because my lazy ass is too lazy to put it in the module
+
 local function setupEffects(ui, hover)
     local ClickEvent = Instance.new("BindableEvent")
 
@@ -4356,7 +4316,6 @@ function UILibrary.Section:Textbox(sett, callback)
     end
 
     functions.setValue = function(new)
-        --/// anims
         element.Text.Text = new
         updateSize()
         callback(element.Text.Text)
@@ -4370,7 +4329,6 @@ function UILibrary.Section:Textbox(sett, callback)
 
     element.Text.Focused:Connect(
         function()
-            -- handle as hover
             TweenService:Create(
                 element,
                 TI,
@@ -4391,7 +4349,6 @@ function UILibrary.Section:Textbox(sett, callback)
 
     element.Text.FocusLost:Connect(
         function()
-            -- set it here
             TweenService:Create(
                 element,
                 TI,
@@ -4452,7 +4409,6 @@ function UILibrary.Section:Keybind(sett, callback)
     local keyPressConn = nil
 
     functions.setValue = function(new)
-        --/// anims
         element.Text.Text = new.Name
         updateSize()
 
@@ -4509,7 +4465,6 @@ function UILibrary.Section:Keybind(sett, callback)
             conn =
                 game:GetService("UserInputService").InputBegan:Connect(
                 function(input, gp)
-                    --if gp then return end
 
                     if input.UserInputType == Enum.UserInputType.Keyboard then
                         currentKb = input.KeyCode
@@ -4756,11 +4711,12 @@ function UILibrary.Section:ColorPicker(sett, callback)
 
         table.insert(
             connections,
-            RunService.RenderStepped:Connect(
-                function()
-                    local mousePos =
-                        game:GetService("UserInputService"):GetMouseLocation() -
-                        Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
+            game:GetService("UserInputService").InputChanged:Connect(
+                function(input)
+                    if input.UserInputType == Enum.UserInputType.MouseMovement then
+                        local mousePos =
+                            game:GetService("UserInputService"):GetMouseLocation() -
+                            Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
 
                     local centreOfWheel =
                         Vector2.new(
@@ -5088,10 +5044,10 @@ function UILibrary.Section:Slider(sett, callback)
 
     local holding = false
 
-    RunService.RenderStepped:Connect(
-        function()
-            if holding then
-                local mouseX = LocalPlayer:GetMouse().X
+    game:GetService("UserInputService").InputChanged:Connect(
+        function(input)
+            if input.UserInputType == Enum.UserInputType.MouseMovement and holding then
+                local mouseX = game:GetService("UserInputService"):GetMouseLocation().X
                 local sliderPos = element.Drag.AbsolutePosition.X
 
                 local leftBoundary = element.Drag.AbsolutePosition.X - (element.Drag.AbsoluteSize.X)
