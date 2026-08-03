@@ -1369,7 +1369,7 @@ local function getObjGen()
             Gui.Logo.LayoutOrder = -5
             Gui.Logo.Size = UDim2.new(1, 0, 0.100000001, 0)
             Gui.Logo.ZIndex = 122
-            Gui.Logo.Image = "rbxassetid://110343555504541"
+            Gui.Logo.Image = "rbxassetid://72712005841770"
             Gui.Logo.ImageColor3 = Color3.fromRGB(134, 142, 255)
             Gui.Logo.ScaleType = Enum.ScaleType.Fit
 
@@ -3275,7 +3275,7 @@ function UILibrary.new(gameName, userId, rank)
     Draggable.Drag(window.MainUI, DragLeft)
     Draggable.Drag(window.MainUI, DragRight)
 
-    window.Watermark.Text = ("FloppaHub | %s | %s"):format(userId, gameName)
+    window.Watermark.Text = ("FloppaHub | %s | %s"):format(gameName)
     local userinfo = window.MainUI.Sidebar.ContentHolder.UserInfo.Content
     userinfo.Rank.Text = rank
     userinfo.Title.Text = userId
