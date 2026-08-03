@@ -1225,7 +1225,7 @@ local function getObjGen()
             Gui.MainUI.AnchorPoint = Vector2.new(0.5, 0.5)
             Gui.MainUI.BackgroundColor3 = Color3.fromRGB(18, 18, 18)
             Gui.MainUI.Position = UDim2.new(0.5, 0, 0.5, 0)
-            Gui.MainUI.Size = UDim2.new(0, 650, 0, 370)
+            Gui.MainUI.Size = UDim2.new(0, 750, 0, 420)
             Gui.MainUI.ZIndex = 100
 
             Gui.DropShadowHolder_9.Name = "DropShadowHolder"
@@ -4012,13 +4012,15 @@ function UILibrary.Button:Section(name, side)
 
     self.oldSelf.oldSelf.UI[self.oldSelf.categoryUI.Name][self.SectionName][name] = {}
 
-    Section.Size = UDim2.new(1, 0, 0, Section.Border.Content.UIListLayout.AbsoluteContentSize.Y + 20)
-
-    Section.Border.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(
-        function()
-            Section.Size = UDim2.new(1, 0, 0, Section.Border.Content.UIListLayout.AbsoluteContentSize.Y + 20)
+    local function updateSize()
+        task.wait()
+        if Section and Section.Border and Section.Border.Content then
+            Section.Size = UDim2.new(1, 0, 0, Section.Border.Content.UIListLayout.AbsoluteContentSize.Y + 25)
         end
-    )
+    end
+
+    updateSize()
+    Section.Border.Content.UIListLayout:GetPropertyChangedSignal("AbsoluteContentSize"):Connect(updateSize)
 
     return setmetatable(
         {
