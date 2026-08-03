@@ -2037,7 +2037,7 @@ local function getObjGen()
             Gui.Left.AutomaticSize = Enum.AutomaticSize.Y
 
             Gui.UIPadding_9.Parent = Gui.Left
-            Gui.UIPadding_9.PaddingBottom = UDim.new(0, 16)
+            Gui.UIPadding_9.PaddingBottom = UDim.new(0, 50)
             Gui.UIPadding_9.PaddingLeft = UDim.new(0, 16)
             Gui.UIPadding_9.PaddingRight = UDim.new(0, 16)
             Gui.UIPadding_9.PaddingTop = UDim.new(0, 32)
@@ -2059,7 +2059,7 @@ local function getObjGen()
             Gui.UIListLayout_21.Padding = UDim.new(0, 35)
 
             Gui.UIPadding_10.Parent = Gui.Right
-            Gui.UIPadding_10.PaddingBottom = UDim.new(0, 16)
+            Gui.UIPadding_10.PaddingBottom = UDim.new(0, 50)
             Gui.UIPadding_10.PaddingLeft = UDim.new(0, 16)
             Gui.UIPadding_10.PaddingRight = UDim.new(0, 16)
             Gui.UIPadding_10.PaddingTop = UDim.new(0, 32)
