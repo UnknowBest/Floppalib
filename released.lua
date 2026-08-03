@@ -3233,18 +3233,44 @@ function UILibrary.new(gameName, userId, rank)
     local window = objectGenerator.new("Window")
     window.Parent = GUI
 
-    local DragHitbox = Instance.new("Frame")
-    DragHitbox.Name = "DragHitbox"
-    DragHitbox.BackgroundTransparency = 1
-    DragHitbox.Size = UDim2.new(1, 0, 0, 45) 
-    DragHitbox.Position = UDim2.new(0, 0, 0, 0)
-    DragHitbox.ZIndex = 300
-    DragHitbox.Parent = window.MainUI
+    local DragTop = Instance.new("Frame")
+    DragTop.Name = "DragTop"
+    DragTop.BackgroundTransparency = 1
+    DragTop.Size = UDim2.new(1, 0, 0, 40)
+    DragTop.Position = UDim2.new(0, 0, 0, 0)
+    DragTop.ZIndex = 300
+    DragTop.Parent = window.MainUI
 
-    local Drag = Draggable.Drag(window.MainUI, DragHitbox)
+    local DragBottom = Instance.new("Frame")
+    DragBottom.Name = "DragBottom"
+    DragBottom.BackgroundTransparency = 1
+    DragBottom.Size = UDim2.new(1, 0, 0, 15)
+    DragBottom.Position = UDim2.new(0, 0, 1, -15)
+    DragBottom.ZIndex = 300
+    DragBottom.Parent = window.MainUI
 
-    --// Customize the GUI
-    window.Watermark.Text = ("hydrahub v2 | %s | %s"):format(userId, gameName)
+    local DragLeft = Instance.new("Frame")
+    DragLeft.Name = "DragLeft"
+    DragLeft.BackgroundTransparency = 1
+    DragLeft.Size = UDim2.new(0, 15, 1, 0)
+    DragLeft.Position = UDim2.new(0, 0, 0, 0)
+    DragLeft.ZIndex = 300
+    DragLeft.Parent = window.MainUI
+
+    local DragRight = Instance.new("Frame")
+    DragRight.Name = "DragRight"
+    DragRight.BackgroundTransparency = 1
+    DragRight.Size = UDim2.new(0, 15, 1, 0)
+    DragRight.Position = UDim2.new(1, -15, 0, 0)
+    DragRight.ZIndex = 300
+    DragRight.Parent = window.MainUI
+
+    Draggable.Drag(window.MainUI, DragTop)
+    Draggable.Drag(window.MainUI, DragBottom)
+    Draggable.Drag(window.MainUI, DragLeft)
+    Draggable.Drag(window.MainUI, DragRight)
+
+    window.Watermark.Text = ("FloppaHub | %s | %s"):format(userId, gameName)
     local userinfo = window.MainUI.Sidebar.ContentHolder.UserInfo.Content
     userinfo.Rank.Text = rank
     userinfo.Title.Text = userId
