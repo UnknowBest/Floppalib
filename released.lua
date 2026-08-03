@@ -3279,90 +3279,7 @@ function UILibrary.new(gameName, userId, rank)
     local userinfo = window.MainUI.Sidebar.ContentHolder.UserInfo.Content
     userinfo.Rank.Text = rank
     userinfo.Title.Text = userId
----------------------------------------------------------
--- ⚙️ PESTAÑA DE SETTINGS
----------------------------------------------------------
--- Icono de engranaje para settings
-local SettingsCat = Window:Category("Settings", "rbxassetid://7072717688") 
-local GeneralTab = SettingsCat:Button("General", "rbxassetid://7072717688")
 
-local UISection = GeneralTab:Section("Interfaz", "Left")
-
-UISection:Slider({
-    Title = "Tamaño de la UI (Escala)",
-    Description = "Ajusta el tamaño para móviles o PC",
-    Min = 40,  -- 40%
-    Max = 120, -- 120%
-    Default = 80 -- 80% es el nuevo estándar
-}, function(valor)
-    Window:SetScale(valor / 100)
-end)
-
-UISection:Slider({
-    Title = "Velocidad de Animaciones",
-    Description = "100 es normal, valores bajos = más rápido",
-    Min = 10,
-    Max = 200,
-    Default = 100
-}, function(valor)
-    Window:setAnimSpeed(valor)
-end)
-
-local SystemSection = GeneralTab:Section("Sistema", "Right")
-
-SystemSection:Keybind({
-    Title = "Ocultar/Mostrar UI",
-    Description = "Tecla para abrir/cerrar el menú en PC",
-    Default = Enum.KeyCode.RightControl
-}, function()
-    Window:ToggleUI()
-end)
-
-SystemSection:Button({
-    Title = "Cerrar Hub (Unload)",
-    Description = "Elimina la UI por completo del juego",
-    ButtonName = "Unload"
-}, function()
-    Window:Unload()
-end)
-
-local CoreGui = game:GetService("CoreGui") or game:GetService("Players").LocalPlayer:WaitForChild("PlayerGui")
-local MobileGui = Instance.new("ScreenGui")
-MobileGui.Name = "MobileToggleUI"
-MobileGui.Parent = CoreGui
-
-local ToggleBtn = Instance.new("TextButton")
-ToggleBtn.Name = "Toggle"
-ToggleBtn.Parent = MobileGui
-ToggleBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
-ToggleBtn.Position = UDim2.new(0.5, -25, 0, 10)
-ToggleBtn.Size = UDim2.new(0, 50, 0, 50)
-ToggleBtn.Font = Enum.Font.GothamBold
-ToggleBtn.Text = "UI"
-ToggleBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-ToggleBtn.TextSize = 14
-ToggleBtn.AutoButtonColor = false
-
-local UICorner = Instance.new("UICorner", ToggleBtn)
-UICorner.CornerRadius = UDim.new(1, 0)
-local UIStroke = Instance.new("UIStroke", ToggleBtn)
-UIStroke.Color = Color3.fromRGB(83, 87, 158)
-UIStroke.Thickness = 2
-
-ToggleBtn.MouseButton1Click:Connect(function()
-    Window:ToggleUI()
-    
-    game:GetService("TweenService"):Create(ToggleBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 45, 0, 45)}):Play()
-    task.wait(0.1)
-    game:GetService("TweenService"):Create(ToggleBtn, TweenInfo.new(0.1), {Size = UDim2.new(0, 50, 0, 50)}):Play()
-end)
-
-
-local oldUnload = Window.Unload
-function Window:Unload()
-    if MobileGui then MobileGui:Destroy() end
-    oldUnload(self)
-end
     return setmetatable(
         {
             UI = {},
@@ -5595,4 +5512,5 @@ end
 function UILibrary.Window:Unload()
     self.MainUI:Destroy()
 end
+
 return UILibrary
