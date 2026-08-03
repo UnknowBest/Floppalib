@@ -4718,51 +4718,52 @@ function UILibrary.Section:ColorPicker(sett, callback)
                             game:GetService("UserInputService"):GetMouseLocation() -
                             Vector2.new(0, game:GetService("GuiService"):GetGuiInset().Y)
 
-                    local centreOfWheel =
-                        Vector2.new(
-                        colourWheel.AbsolutePosition.X + (colourWheel.AbsoluteSize.X / 2),
-                        colourWheel.AbsolutePosition.Y + (colourWheel.AbsoluteSize.Y / 2)
-                    )
+                        local centreOfWheel =
+                            Vector2.new(
+                            colourWheel.AbsolutePosition.X + (colourWheel.AbsoluteSize.X / 2),
+                            colourWheel.AbsolutePosition.Y + (colourWheel.AbsoluteSize.Y / 2)
+                        )
 
-                    local distanceFromWheel = (mousePos - centreOfWheel).Magnitude
+                        local distanceFromWheel = (mousePos - centreOfWheel).Magnitude
 
-                    if holdingHsv then
-                        if distanceFromWheel <= colourWheel.AbsoluteSize.X / 2 then
-                            colourWheel.Pointer.Position =
+                        if holdingHsv then
+                            if distanceFromWheel <= colourWheel.AbsoluteSize.X / 2 then
+                                colourWheel.Pointer.Position =
+                                    UDim2.new(
+                                    0,
+                                    mousePos.X - colourWheel.AbsolutePosition.X,
+                                    0,
+                                    mousePos.Y - colourWheel.AbsolutePosition.Y
+                                )
+                            end
+                        end
+
+                        if holdingSaturation then
+                            darknessSlider.Position =
                                 UDim2.new(
+                                darknessSlider.Position.X.Scale,
                                 0,
-                                mousePos.X - colourWheel.AbsolutePosition.X,
                                 0,
-                                mousePos.Y - colourWheel.AbsolutePosition.Y
+                                math.clamp(
+                                    mousePos.Y - darknessPicker.AbsolutePosition.Y,
+                                    0,
+                                    darknessPicker.AbsoluteSize.Y
+                                )
                             )
                         end
-                    end
 
-                    if holdingSaturation then
-                        darknessSlider.Position =
-                            UDim2.new(
-                            darknessSlider.Position.X.Scale,
-                            0,
-                            0,
-                            math.clamp(
-                                mousePos.Y - darknessPicker.AbsolutePosition.Y,
-                                0,
-                                darknessPicker.AbsoluteSize.Y
-                            )
-                        )
-                    end
+                        local clr, new = updateWheel()
 
-                    local clr, new = updateWheel()
+                        darknessPicker.ImageColor3 = new
 
-                    darknessPicker.ImageColor3 = new
+                        if clr ~= oldColor then
+                            oldColor = clr
 
-                    if clr ~= oldColor then
-                        oldColor = clr
-
-                        Content.ClrDisplay.RGB.Textbox.Text =
-                            math.floor(clr.R * 255) ..
-                            ", " .. math.floor(clr.G * 255) .. ", " .. math.floor(clr.B * 255)
-                        Content.ClrDisplay.Hex.Textbox.Text = toHex(clr)
+                            Content.ClrDisplay.RGB.Textbox.Text =
+                                math.floor(clr.R * 255) ..
+                                ", " .. math.floor(clr.G * 255) .. ", " .. math.floor(clr.B * 255)
+                            Content.ClrDisplay.Hex.Textbox.Text = toHex(clr)
+                        end
                     end
                 end
             )
