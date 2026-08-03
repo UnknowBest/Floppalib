@@ -2728,7 +2728,7 @@ local function getDragIt()
         coroutine.wrap(
             function()
                 while Settings.HoverIcon do
-                    RS.RenderStepped:task.wait()
+                    RS.RenderStepped:wait()
                     if Settings.PriorityIcon == "Hover" or not Holding then
                         local CanSet = true
                         for _, v in ipairs(Objects) do
@@ -2954,7 +2954,7 @@ local function getDragIt()
                                         if v.ResponseTime then
                                             if v.ResponseTime > 0 then
                                                 for i = 1, 10 do
-                                                    RS.RenderStepped:task.wait()
+                                                    RS.RenderStepped:wait()
                                                     v.Object.Position =
                                                         v.Object.Position:Lerp(v.Clipped.Position, i / 10)
                                                 end
@@ -2968,7 +2968,7 @@ local function getDragIt()
                                         local Target = Utils.Snap(v.Snap, v.Object, v._Target)
                                         if v.ResponseTime then
                                             for i = 1, 10 do
-                                                RS.RenderStepped:task.wait()
+                                                RS.RenderStepped:wait()
 
                                                 v.Object.Position = v.Object.Position:Lerp(Target, i / 10)
                                             end
@@ -3640,7 +3640,7 @@ local function expire()
         )
     )
 
-    bindable.Event:task.wait()
+    bindable.Event:wait()
     return selection
 end
 
