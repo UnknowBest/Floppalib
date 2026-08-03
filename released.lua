@@ -3275,10 +3275,15 @@ function UILibrary.new(gameName, userId, rank)
     Draggable.Drag(window.MainUI, DragLeft)
     Draggable.Drag(window.MainUI, DragRight)
 
-    window.Watermark.Text = ("FloppaHub | %s | %s"):format(userId, gameName)
+    -- Convertimos los valores a texto de forma segura para evitar errores "nil"
+    local safeGameName = tostring(gameName or "Unknown")
+    local safeUserId = tostring(userId or "Unknown")
+    local safeRank = tostring(rank or "Unknown")
+
+    window.Watermark.Text = ("FloppaHub | %s | %s"):format(safeUserId, safeGameName)
     local userinfo = window.MainUI.Sidebar.ContentHolder.UserInfo.Content
-    userinfo.Rank.Text = rank
-    userinfo.Title.Text = userId
+    userinfo.Rank.Text = safeRank
+    userinfo.Title.Text = safeUserId
 
     return setmetatable(
         {
